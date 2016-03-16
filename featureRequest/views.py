@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from .models import Post
 
 # Create your views here.
 
 def post_list(request):
-    return render(request,'featureRequest/post_list.html',{})
+    posts=Post.objects.all()
+    return render(request,'featureRequest/post_list.html',{'posts':posts})

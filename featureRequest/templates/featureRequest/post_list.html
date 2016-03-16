@@ -2,6 +2,15 @@
 <head>
 </head>
 <body>
-<h1>I am the home page</h1>
+<div>
+    <h1><a href="/">Feature Request Portal</a></h1>
+</div>
+{% for post in posts %}
+    <div>
+        <p>Title: {{ post.title }}</p>
+        <p>Description: {{post.description}}</p> 
+        </br>       
+    </div>
+{% endfor %}
 </body>
 <html>
