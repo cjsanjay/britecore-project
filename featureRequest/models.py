@@ -15,8 +15,7 @@ class Post(models.Model):
     client_choice=((client_a,'Client A'),(client_b,'Client B'),(client_c,'Client C'),)
     prod_choice=((policy,'Policies'),(bill,'Billing'),(claim,'Claims'),(report,'Reports'))
     
-    #fields decalaration
-    user = models.ForeignKey('auth.User')
+    #fields decalaration   
     title = models.CharField(max_length=200)    
     client = models.CharField(max_length=1,choices=client_choice)
     client_priority=models.IntegerField()

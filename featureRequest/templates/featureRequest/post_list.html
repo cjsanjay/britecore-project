@@ -1,16 +1,23 @@
-<html>
-<head>
-</head>
-<body>
-<div>
-    <h1><a href="/">Feature Request Portal</a></h1>
-</div>
+{% extends 'featureRequest/base.html' %}
+
+{% block content %}
+
+<button type="button" class="filterButton" id='all'>All</button>
+<button type="button" class="filterButton" id="Client A">Client A</button>
+<button type="button" class="filterButton" id="Client B">Client B</button>
+<button type="button" class="filterButton" id="Client C">Client C</button>
+</br></br>
 {% for post in posts %}
-    <div>
-        <p>Title: {{ post.title }}</p>
-        <p>Description: {{post.description}}</p> 
-        </br>       
+    <div class="post {{post.client}}">
+        <table width="100%" class="post_element">
+            <tr><td><p>Title: {{ post.title }}</p></td></tr>
+             <tr><td><p>Client: {{post.client}}</p></td><td><p>Priority:{{post.client_priority}}</p></td><td><p>Target Date: {{post.target_date}}</p></td></tr>
+            <tr><td><p>Production Area: {{post.prod_area}}</p></td><td><p>Ticket URL: {{post.ticket_url}}</p></td></tr>
+             <tr colspan=3><td><p>Description: {{post.description}}</p> </td></tr> 
+        </table> 
+        <hr>                              
     </div>
+    
 {% endfor %}
-</body>
-<html>
+{% endblock %}
+
