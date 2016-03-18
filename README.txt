@@ -1,4 +1,6 @@
 # britecore-project
+A web app for registering and checking already resgistered feature requests in the system.
+
 Setup: Tech stack Python/Django
 
 Step1: Clone the github repository on your machine
