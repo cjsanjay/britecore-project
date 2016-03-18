@@ -12,10 +12,10 @@ Step 2: Create a virtual environment so that it wont affect the other applicatio
     (If pip is not install in your machine then installit using sudo apt-get install pip)
 
 Step3: Create database in your machine
-    >> python manage.py migrate
+    python manage.py migrate
 
 Step4: Run the server
-    >>python manage.py runserver
+    python manage.py runserver
 
 step 5:  go to address http://127.0.0.1:8000/
 
