@@ -51,6 +51,7 @@ Button{
 
 .form-wrapper{
     padding-bottom:10px;
+    margin-bottom:10px;
 }
 
 .post-form textarea, .post-form input {
@@ -73,8 +74,7 @@ Button{
 .post {
     margin-bottom: 30px;    
     padding-left: 10px;    
-    padding-top:5px; 
-    cursor:pointer;    
+    padding-top:5px;    
 }
 
 .post: hover{
@@ -83,6 +83,10 @@ Button{
 
 .post h1 a, .post h1 a:visited {
     color: #000000;
+}
+
+.data{
+    color:#8A0808;
 }
 
 

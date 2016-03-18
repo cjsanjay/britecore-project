@@ -1,18 +1,25 @@
 {% load staticfiles %}
 <html>
     <head>
-        <title>IWS Feature Request Portal</title>
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <title>IWS Feature Request Portal</title>       
         <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
         <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{% static 'css/featureRequest.css' %}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
         <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <link rel="stylesheet" href="/resources/demos/style.css">
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>        
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">        
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
         <script type="text/javascript"> 
-        $(document).ready(function(){       
+        function displayDetails(data){
+            var text=data;
+            $("#myModal").on("show.bs.modal", function(e) { 
+                var html_str='<table width="100%" class="post_element"><tr><td><p><b>Title:</b>'+data["title"]+'</p></td></tr><tr><td><p><b>Client:</b>'+data["client"]+'</p></td><td><p><b>Priority:</b>'+data["client_priority"]+'</p></td><td><p><b>Target Date:</b> <span class="data">'+data["target_date"]+'</span></p></td></tr><tr><td><p><b>Production Area:</b> '+data["prod_area"]+'</p></td><td><p><b>Ticket URL:</b> '+data["ticket_url"]+'</p></td></tr><tr colspan=3><td><p><b>Description:</b>'+data["description"]+'</p> </td></tr></table>';               
+                $(this).find(".modal-body").html(html_str);
+            });
+        } 
+        $(document).ready(function(){              
             $(".filterButton").click(function(){
                 var id1=this.id;
                 var divs = $(".post");
@@ -25,7 +32,27 @@
                     }                    
                 }       
             });
-            $( "#id_target_date" ).datepicker();            
+            $( "#id_target_date" ).datepicker(); 
+            $(".post_details").click(function(){
+                var data_id=$(this).attr('id');
+                $.ajax({
+                    url : "post/get_details/", // the endpoint
+                    type : "GET", // http method
+                    data : { post_id : data_id  }, // data sent with the delete request
+                    async:false,
+                    success : function(json) {
+                        // hide the post  
+                      displayDetails(json);                     
+                      console.log("successful");
+                    },
+                    error : function(xhr,errmsg,err) {
+                        // Show an error 
+                        console.log(json);                      
+                        console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                    }
+                });                          
+            }); 
+                     
          });
         </script>
     </head>
