@@ -3,10 +3,11 @@ from .forms import PostForm
 from .models import Post
 import sys
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 
 # Create your views here.
 
+#View for publishing list of features already submitted to the portal
 def post_list(request):
     posts=Post.objects.all().order_by('client_priority','target_date')
     final=[]
@@ -19,9 +20,11 @@ def post_list(request):
     return render(request,'featureRequest/post_list.html',{'posts':posts})
     
 
+#View for submitting a new feature request and saving in data base
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST)
+        print >>sys.stderr, form
         if form.is_valid():
             post = form.save(commit=False)
             cur=post.client_priority
@@ -34,7 +37,8 @@ def post_new(request):
     else:
         form = PostForm()
     return render(request, 'featureRequest/post_edit.html', {'form': form}) 
-    
+
+#View for fetching details for a specific feature request and return in json format  
 def get_details(request):
     if request.method=="GET":       
         d=request.GET['post_id']
@@ -44,8 +48,74 @@ def get_details(request):
         for each_post in all_posts:            
             if int(each_post.client_priority)==int(client_p):                                
                 return HttpResponse(json.dumps(get_dict(each_post)),content_type="application/json")
-        return HttpResponse(json.dumps({"val":0}),content_type="application/json")        
-                
+        return HttpResponse(json.dumps({"val":0}),content_type="application/json")     
+        
+
+#view for making a copy of feature request with same Id        
+def getCopy(source,dest):
+    dest.client=source.client
+    dest.title=source.title
+    dest.client_priority=source.client_priority
+    dest.target_date=source.target_date
+    dest.description=source.description
+    dest.ticket_url=source.ticket_url
+    dest.prod_area=source.prod_area
+    return dest 
+            
+
+#View for updating existing feature request and make client priority consistent
+def edit_details(request,client1="client A",client_p=1):    
+    #print client1,client_p
+    id1=0    
+    if request.method == "POST":
+        form = PostForm(request.POST)       
+        post_id=request.POST['id_record']  
+        print form
+        print form.is_valid()            
+        if form.is_valid():            
+            post = form.save(commit=False)
+            cur=post.client_priority
+            for each_post1 in Post.objects.filter(client=post.client).order_by('client_priority'):
+                print >>sys.stderr, each_post1.id,post_id
+                if each_post1.id==int(post_id):                                     
+                    each_post1=getCopy(post,each_post1)
+                    print >>sys.stderr, each_post1.description
+                    each_post1.save()
+                    if each_post1.client_priority!=post.client_priority:
+                        cur=each_post1.client_priority
+                        for each_post in Post.objects.filter(client=post.client).order_by('client_priority'):
+                            #print >>sys.stderr, post_id,each_post.id
+                            if each_post.client_priority==cur and int(post_id)!=each_post.id:
+                                each_post.client_priority=each_post.client_priority+1
+                                cur=cur+1
+                                each_post.save()                            
+                    break
+        return HttpResponseRedirect("/")            
+        posts=Post.objects.all().order_by('client_priority','target_date')  
+        final=[]
+        prod_area1={'P':'Policies','B':'Billing','C':'Claims','R':'Reports'}
+        for each_post in posts:
+            temp=each_post
+            temp.client='Client '+each_post.client            
+            temp.prod_area=prod_area1[temp.prod_area]
+            temp.description=temp.description[:20]          
+        return render(request,'featureRequest/post_list.html',{'posts':posts})                            
+    else:
+        form = PostForm()        
+        for each_post in Post.objects.filter(client=client1.split(' ')[1]):           
+            if each_post.client_priority==int(client_p): 
+                form.fields['title']=each_post.title                         
+                form.fields['client']=each_post.client
+                form.fields['client_priority']=each_post.client_priority       
+                form.fields['description']=each_post.description       
+                form.fields['target_date']=each_post.target_date.strftime("%m/%d/%Y")       
+                form.fields['ticket_url']=each_post.ticket_url       
+                form.fields['prod_area']=each_post.prod_area
+                id1=each_post.id                               
+                break                             
+    return render(request, 'featureRequest/post_update.html', {'form': form,'id':id1})        
+
+#function to get the dictionary version of class object                
 def get_dict(data):
     temp={}
     prod_area1={'P':'Policies','B':'Billing','C':'Claims','R':'Reports'}

@@ -1,0 +1,61 @@
+{% extends 'featureRequest/base.html' %}
+
+{% block content %}
+    <h1>New Feature Request</h1>
+    <div class="form-wrapper">    
+         <form method="POST" class="post-form">{% csrf_token %}
+            <input type='hidden' id='{{id}}' name='id_record' value='{{id}}' />
+        	<p><label for="id_title">Title:</label> <input id="id_title" maxlength="200" name="title" type="text" value="{{ form.fields.title }}" required/></p>
+			<p><label for="id_client">Client:</label> 
+			<select id="id_client" name="client" readonly="readonly">    				
+				{% if form.fields.client == "A" %}
+				    <option value="A" selected="selected">Client A</option>
+				{% endif  %}				   
+				{% if form.fields.client == "B" %}
+				    <option value="B" selected="selected">Client B</option>
+				{% endif  %}				    				    
+				{% if form.fields.client == "C" %}
+				    <option value="C" selected="selected">Client C</option>
+				{% endif  %}				    
+			</select></p>
+			<p><label for="id_client_priority">Client priority:</label> <input id="id_client_priority" name="client_priority" type="number" required value="{{ form.fields.client_priority }}"/></p>
+
+			<p><label for="id_description">Description:</label> <textarea cols="40" id="id_description" name="description" rows="10" required>{{ form.fields.description }}</textarea></p>
+
+			<p><label for="id_target_date">Target date:</label> <input id="id_target_date" name="target_date" type="text" value="{{ form.fields.target_date }}" required/></p>
+
+			<p><label for="id_ticket_url">Ticket url:</label> <input id="id_ticket_url" maxlength="200" name="ticket_url" type="url" value="{{ form.fields.ticket_url }}" required/></p>
+
+			<p><label for="id_prod_area">Prod area:</label> 
+			<select id="id_prod_area" name="prod_area" required>
+				<option value="" selected="selected">---------</option>
+				{% if form.fields.prod_area == "P" %}
+				    <option value="P" selected="selected">Policies</option>
+				{% else  %}
+				    <option value="P">Policies</option>
+				{% endif %}
+				    
+				{% if form.fields.prod_area == "B" %}
+				    <option value="B" selected="selected">Billing</option>
+				{% else  %}
+				    <option value="B">Billing</option>
+				{% endif %}
+				    
+				{% if form.fields.prod_area == "C" %}
+				    <option value="C" selected="selected">Claims</option>
+				{% else  %}
+				    <option value="C">Claims</option>
+				{% endif %}
+				    
+				{% if form.fields.prod_area == "R" %}
+				    <option value="R" selected="selected">Reports</option>
+				{% else  %}
+				    <option value="R">Reports</option>
+				{% endif %}
+			</select></p>
+		<a class="btn btn-info btn-md" style="float:left" href="/">Back</a>	
+        <button type="submit" class="save btn btn-primary btn-md">Update</button>       
+    </form>           
+    </div>  
+    </br></br>
+{% endblock %}

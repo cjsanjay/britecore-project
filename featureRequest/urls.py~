@@ -4,5 +4,7 @@ from . import views
 urlpatterns = [
     url(r'^$', views.post_list, name='post_list'),
     url(r'^post/new/$', views.post_new, name='post_new'),
-    url(r'^post/get_details/$', views.get_details, name='get_details'),
+    #url(r'^post/new/(?P<client>[-\w]+)/(?P<client_p>\w+)$', views.edit_details, name='edit_details'),
+    url(r'^post/postDetails/$', views.get_details, name='get_details'),
+    url(r'^post/editDetails/(?P<client>[\w ]+)/(?P<client_p>[0-9]+)/$', views.edit_details, name='edit_details'),
 ]

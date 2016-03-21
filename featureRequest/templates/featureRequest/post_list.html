@@ -7,22 +7,37 @@
 <button type="button" class="filterButton btn btn-primary btn-md" id="Client B">Client B</button>
 <button type="button" class="filterButton btn btn-primary btn-md" id="Client C">Client C</button>
 </br></br>
+<!-- Generating rows with all the feature request in the system-->
 {% for post in posts %}
-    <div class="post {{post.client}}">
+    <div class="post {{post.client}}" style="width:100%">
         <table width="100%" class="post_element">
-            <tr><td><p><b>Title:</b> {{ post.title }}</p></td></tr>
-             <tr><td><p><b>Client:</b> {{post.client}}</p></td><td><p><b>Priority:</b>{{post.client_priority}}</p></td><td><p><b>Target Date:</b> <span class="data">{{post.target_date}}</span></p></td></tr>
-            <tr><td><p><b>Production Area:</b> {{post.prod_area}}</p></td><td><p><b>Ticket URL:</b> {{post.ticket_url}}</p></td></tr>
-             <tr colspan=3><td><p><b>Description:</b> {{post.description}}</p> </td></tr>
-             <tr><td><button type="button" id="{{post.client}}_{{post.client_priority}}" class="btn btn-info btn-md post_details" data-toggle="modal" data-target="#myModal">Details</button></td></tr>
+            <tr>
+              <td><p><b>Title:</b> {{ post.title }}</p></td>
+            </tr>
+            <tr>
+              <td width="30%"><p><b>Client:</b> {{post.client}}</p></td>
+              <td width="20%"><p><b>Priority:</b>{{post.client_priority}}</p></td>
+              <td width="50%"><p><b>Target Date:</b> <span class="data">{{post.target_date}}</span></p></td>
+            </tr>
+            <tr>
+              <td><p><b>Production Area:</b> {{post.prod_area}}</p></td>
+              <td><p><b>Ticket URL:</b> {{post.ticket_url}}</p></td>
+            </tr>
+            <tr colspan=3>
+              <td><p><b>Description:</b> {{post.description}}</p> </td>
+            </tr>
+            <tr>
+              <td><button type="button" id="{{post.client}}_{{post.client_priority}}" class="btn btn-info btn-md post_details" data-toggle="modal" data-target="#myModal">Details</button></td>
+              <td><a class="btn btn-info btn-md post_details" id="{{post.client}}_{{post.client_priority}}_edit" href="{% url 'edit_details' post.client post.client_priority%}">Edit</a></td>
+            </tr>
         </table> 
         <hr>                              
     </div>
     
 {% endfor %}
 <!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+<div id="myModal" class="modal fade" role="dialog" >
+  <div class="modal-dialog" style="width:60%">
 
     <!-- Modal content-->
     <div class="modal-content">
